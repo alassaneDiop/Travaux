@@ -70,4 +70,27 @@ il n'y a pas de modulation sur le réseau ethernet, bande de base = pas de modul
 
 tous ceux qui sont connectés écoutent si une trame arrive. il ya collision si deux segments communiquent en même temps.
 format d'une trame ethernet : preambule (7 octets) + sfd (1 octet) + dest (6 octets) + source (6 octets) + type data (2 octets) + data (46 - 1500 octets) + fcs (4 octets)
+entete = dest source type de donnée
+la taille de la zone de données est de maximun 1518 (car + l'entete),
 
+la couche MAC (Media Access Control) est une sous couche de la couche liaison de données. Elle met en forme la trame convertit les octets en éléments binaire, envoie le préambule, calcule le controle d'erreur, écoute si pendant 9 micro secondes le cable est libre elle envoie.
+
+la différence entre ethernet 1 et 2 est que le champ longueur de données est remplacé pa le champ type de protocole
+
+Fast Ethernet
+
+le cable croisé est pour relier deux pc directement; entre un pc et un équipement (routeur par exemple) on a un cable droit.
+
+cable paires torsadées
+cable coaxial
+fibre
+une trame ethernet 2 est constituée du préambule (suite de 1 0 terminée par 1 sur 8octets), adresse destination, adresse source, type protocole, données, controle d'erreur. la taille max de la trame est de 1518, taille minimum est de 64. le préambule n'est pas compté.
+si une trame plus longue que la taille max ou plus courte que la taille min, elle est détruite
+
+le type de protocole sur 2 octets : 0x0800 = IPV4, 0x0806 = ARP, 0x8035 = RARP (reverse ARP), 0x 86DD = IPV6 (0x ne fait pas partie du code)
+
+l'adresse MAC = xx:xx:xx:yy:yy:yy (xx:xx:xx est le fabriquant, yy:yy:yy est l'équipement)
+le 1er bit : 0 individuel, 1 collectif
+le 2eme bit : 0 universel, 1 local
+22 bits suivants : id fabricant
+24 derniérs bits : équipement
