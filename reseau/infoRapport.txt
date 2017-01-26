@@ -1,0 +1,21 @@
+les interface 
+adresse IP
+mask de sous reseau
+la passerelle par defaut
+la taille maximale d'un paquet
+
+explication brieve de l'interface lo
+
+pour ifconfig et route
+	donner l'equivalent avec la configuration IP
+
+a qui appartient
+
+8; l'adresse ip de labri.fr, cremi, u-bordeaux.fr
+
+11. l'équivalent de comment attribuer une adresse ip à une interface sous windows
+	comment afficher les différentes interfaces
+	comment supprimer l'adresse ip d'une interface
+	comment activer désactiver une interface
+	comment ajouter une passerelle par défaut
+	comment afficher les routes (afficher les)

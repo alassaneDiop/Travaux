@@ -1,0 +1,6 @@
+cp ~pwacreni/PAP-2017/TP1-omp-parallel-for/
+
+make hello pour utiliser le Makefile
+
+barrier impose aux threads de s'attendre
+la section critique permet d'assurer que le bloc sera executé en solitaire c'est à dire qu'aucune autre instruction ne pourra s'exécuter entre temps

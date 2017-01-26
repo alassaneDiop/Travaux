@@ -1,0 +1,73 @@
+SUPPORS DE TRANSMISSION
+
+Les cables à paires torsadées, 
+débit jusqu'à plusieurs gigabits
+c'est enroulé pour limiter les interférences
+
+Cables coaxiale debit plus de 100 Mbps (sur 1 km)
+
+Fibre optique tres haut débit sur de trés longues distances
+débit recor : 1 Pbp, soit 10000000 Gbps (sur 52 km), elle est surtout utilisée dans les réseaux de coeur. Par conre plus la distance est longue plus la lumioére s'atténue; pour pallier à ce phénoméne, on mt en place des amplificateurs.
+Les réseaux de coeurs ulisent le WDM
+
+Le Média hertzien, c'est des ondes electromagnétiques
+
+==========================
+
+QUELQUES DEFINIIONS
+
+Un signal est périodique si sa valeur à l'instant t = valeur instant t + T; T est la période 
+La Fréquence : 1 / T (unité de mesure Hertz). Plus la fréquence est élevée plus le signal a une energie élevée
+Bande passante (W) : fréquence max - fréquence min
+------------------------------------------------------------------------------------------------------------
+|  Formule de Shannon : Débit maximum (D) = W * log 2 (1 + S/N), unité de mesure Kbps kilobits par seconde |
+|  S = signal N = bruit ou nosse. S/N = log 10 (P(S)/P(N)) // P = puissance                                |
+------------------------------------------------------------------------------------------------------------
+Le spectre du signal à transmettre doi être compris dans la bande passante du support physique.
+Un signal est caractérisé par son amplitude A, sa fréquence f et sa phase fi tel que : y(t) = A sin(2pift + fi)
+Pour qu'une onde aille loin sur un support physique, il faut que la fréquence soit élevée
+
+
+La Modulation : c'est la transformation d'un signal numérique en signal analogique
+La rapidité de modulation (RM en bauds) c'est la vitesse à laquelle un symbole est traité, c'est = 1/T; T est l'intervalle de modulation, c'temps de modulation d'un symbole. D'une facon génrale D = q.RM
+
+
+Le Multiplexage c'est comment transmettre et transmettre sur quelle fréquence, le but est d'optimiser l'usage des canaux de transmission.
+2 techniques coexistent : 
+- Le multiplexae en fréquence : découper la bande passante d'un canal en plusieurs sous-bande, chaque sous-bande est affectée à une voie de transmission. Plus la bande passante est petite moins on peut transmettre des informations. Il est beaucoup utilisé dans les réseaux de core avec les fibres optiques.
+
+- Le multiplexage temporel : des bits ou (des octets) sont prélevés successivement sur les différentes voies reliées au multiplexeur pour construire un train de bits qui constituera le signal composite.
+
+- Le multiplexage templorel statisque :
+
+Transmission analogique c'est la modulation en fréquence 
+
+La Transmission en bande de base, on envoie le signal sur le cable sans modulation, on code directement l'information en 0 et 1.
+Codage Miller : si 1 rtansitione en milieu de période, si 0 pas d etransition en milieu mais transition en fin suivi d'un autre 0
+
+transmission unicast : on envoie à une personne
+transmission multicast : on envoie à plusieurs personnes
+transmission broadcast : on envoie à tout le monde
+
+La Numérisation : des signaux analogiques sont transformés en signaux numériques
+
+
+lA Télétransmission, deux équiopements qui veulent commu,ioquer avec un canal de transmission
+
+transmission des signaux électriques si c'est en longue distance on uilise la modulation
+
+bibliogrpahie 
+reseaux et telematique g pujolles eyrolle
+
+
+=====================================
+
+ETHERNET
+
+ethernet est un réseau local. 10base5 est 10 méga seconde sur cable coaxial, 5 = cable coaxial
+Les derniéres versions d'ethrnet sont full duplex, le controle d'erreur est fait au niveeau CFC. le gros défaut d'ethernet est la sécurité.
+il n'y a pas de modulation sur le réseau ethernet, bande de base = pas de modulation
+
+tous ceux qui sont connectés écoutent si une trame arrive. il ya collision si deux segments communiquent en même temps.
+format d'une trame ethernet : preambule (7 octets) + sfd (1 octet) + dest (6 octets) + source (6 octets) + type data (2 octets) + data (46 - 1500 octets) + fcs (4 octets)
+

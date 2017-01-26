@@ -1,0 +1,138 @@
+package package com.calculatrice;
+
+import java.util.Scanner;
+
+public class MoteurCalculatrice {
+
+
+	public static void main(String[] args) {
+
+		Pile<Double> pile = new Pile<Double>();
+		Scanner sc = new Scanner(System.in);
+		String s = null;
+		
+		while(!(s = sc.next()).equals(";")){
+			if(s.matches("[0-9]+\\.{0,1}[0-9]*")){
+				pile.empiler(Double.parseDouble(s));
+			}
+			else{
+				
+				if(s.equalsIgnoreCase("cos")){
+					cosinus(pile);
+				}
+				else if(s.equalsIgnoreCase("sin")){
+					sinus(pile);
+				}
+				else if(s.equalsIgnoreCase("sqrt")){
+					sqrt(pile);
+				}
+				else{
+					switch (s.charAt(0)){
+					case '-': 	soustraire(pile);
+								break;
+					case '+': 	additionner(pile);
+								break;
+					case '*':	multiplier(pile);
+								break;
+					case '/':	diviser(pile);
+								break;
+				}
+				}
+				
+			}
+		}
+		System.out.println("Le resultat est "+pile.valeur() + ".");
+		
+	}
+	
+	public static double run(String string) {
+
+		Pile<Double> pile = new Pile<Double>();
+		string = string + " ;";
+		Scanner sc = new Scanner(string);
+		String s = null;
+		
+		while(!(s = sc.next()).equals(";")){
+			if(s.matches("[0-9]+\\.{0,1}[0-9]*")){
+				pile.empiler(Double.parseDouble(s));
+			}
+			else{
+				
+				if(s.equalsIgnoreCase("cos")){
+					cosinus(pile);
+				}
+				else if(s.equalsIgnoreCase("sin")){
+					sinus(pile);
+				}
+				else if(s.equalsIgnoreCase("sqrt")){
+					sqrt(pile);
+				}
+				else{
+					switch (s.charAt(0)){
+					case '-': 	soustraire(pile);
+								break;
+					case '+': 	additionner(pile);
+								break;
+					case '*':	multiplier(pile);
+								break;
+					case '/':	diviser(pile);
+								break;
+				}
+				}
+				
+			}
+		}
+		return pile.valeur();
+		
+	}
+	
+	private static void soustraire(Pile<Double> pile){
+		double v1 = pile.valeur();
+					pile.depiler();
+		double v2 = pile.valeur();
+					pile.depiler();
+		
+		pile.empiler(v2 - v1);
+	}
+	
+	private static void additionner(Pile<Double> pile){
+		double v1 = pile.valeur();
+		pile.depiler();
+		v1 += pile.valeur();
+		pile.depiler();
+		pile.empiler(v1);
+	}
+
+	private static void multiplier(Pile<Double> pile){
+		double v1 = pile.valeur();
+		pile.depiler();
+		v1 *= pile.valeur();
+		pile.depiler();
+		pile.empiler(v1);
+	}
+	
+	private static void diviser(Pile<Double> pile){
+		double v1 = pile.valeur();
+					pile.depiler();
+		double v2 = pile.valeur();
+					pile.depiler();
+		pile.empiler(v2 / v1);
+	}
+	
+	private static void cosinus(Pile<Double> pile){
+		double v = Math.cos(pile.valeur());
+		pile.depiler();
+		pile.empiler(v);
+	}
+	
+	private static void sinus(Pile<Double> pile){
+		double v = Math.sin(pile.valeur());
+		pile.depiler();
+		pile.empiler(v);
+	}
+	private static void sqrt(Pile<Double> pile){
+		double v = Math.sqrt(pile.valeur());
+		pile.depiler();
+		pile.empiler(v);
+	}
+}

@@ -1,0 +1,54 @@
+2. Configuration des interfaces
+2.1. Commande ifconfig
+
+	2. liste des interfaces reseaux
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1  (Local Loopback)
+        RX packets 91  bytes 46429 (45.3 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 91  bytes 46429 (45.3 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+lo la boucle locale permet à une machine de s'envoyer elle même un message
+
+dans le fichier topology on voit qu'on a 1 switch s1 et 4 machines connectés
+
+	3. configuration eth0
+ifconfig eth0 172.16.0.1 netmask 255.255.255.0 up
+172.16.0.0/24 24 signifie une succession de 24 bits de 1 (1111111111.....); chaque succession de 8 bits de 1 est égale à 255 (11111111.11111111.11111111.000... = 255.255.255.0)
+
+	4. type et classe du réseau
+le type de l'adresse est privé car commançant par 172 (aussi 192, 10), elle est de classe B (car comprise entre 128.. et 192..); les adresses de classe B ont des mask réseaux d'au moins 16 bits
+
+	5. adresse de broadcast
+172.16.0.255
+root@immortal:~ #ifconfig 
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 172.16.0.1  netmask 255.255.255.0  broadcast 172.16.0.255
+        inet6 fe80::a8aa:aaff:feaa:0  prefixlen 64  scopeid 0x20<link>
+        ether aa:aa:aa:aa:00:00  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 16  bytes 1296 (1.2 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+l'adresse de broadcast est calculée de la maniére suivante : adresse réseau suivie du 
+c'est l'adresse utilisée pour envoyer des messages à toutes les machines du sous réseau
+
+	7. vérification configuration ping
+root@opeth:~ # ping 172.16.0.1
+--- 172.16.0.1 ping statistics ---
+485 packets transmitted, 485 received, 0% packet loss, time 484805ms
+rtt min/avg/max/mdev = 0.217/0.702/1.261/0.116 ms
+
+	8. ping adresse broadcast
+l'option -b permet de pinger sur une adresse de broadcast. Comme résultat, les paquets transmis ne sont pas recus.
+tcpdump permet de voir tous les messages recus sur réseau
+
+2.2 Fichier /etc/network/interfaces
+auto eth0
+iface eth0 inet static
+address 172.16.0.1
+netmask 255.255.255.0

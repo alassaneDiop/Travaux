@@ -1,0 +1,14 @@
+package com.calculatrice;
+
+public interface PileInterface<T> {
+
+	public boolean estVide();
+	
+	public void empiler(T d);
+	
+	public void depiler();
+	
+	public T valeur();
+	
+
+}

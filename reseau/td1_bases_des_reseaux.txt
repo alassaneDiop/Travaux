@@ -1,0 +1,100 @@
+1. Fondamentaux
+	1. les 7 couches du modéle OSI sont:
+		7 Application : c'st la que se trouvent toutes les applications et les applications accédent aux fonctionnalités réseaux
+			exemple : HTTP, HTTPS, FTP
+		6 Presentation : encodage des données, représentation des données en structure de données
+			exemple : ASCII, Unicode, ...
+
+		5 Session : établir des sessions
+			exmple : Apple Talk, Not Bios
+
+		4 Transport : fonctionnalité de bout en bout, l'établissement des sessions, le multiplexage
+			exemple : TCP / UDP
+
+		3 Reseaux : routage des données, adressage
+			exemple : IPV4, IPV6, ICMP, X25, ...
+
+		2 Liaison de données : la transmission des trames en séquence
+			exemple : ethernet, adresse MAC, protocole TokenRing
+
+		1 Physique : le matériel et tout ce qui est traitement du  signal, codage de l'information modulation démodulation
+			exemple : cable, carte graphique, onde erthienne
+
+	2,3. les 4 couches du modéle TCP / IP (correspondance avec les couches du modéle OSI)
+		4 Application (Application, Présnetation, Session)
+		3 Transport (Transport)
+		2 Internet (Réseau)
+		1 Accés Réseaux (Liaison de données, Physique)
+
+	4. -Un hub (concentrateur) est un équipement permittant de relier des appareils.
+
+	   -Un switch (commutateur) il interconnecte différents appareils, mais n'envoie la trame reçue qu'à l'ordinateur destinataire. il a une adresse, il peut être configuré
+		il a une table avec adresse MAC et port, chaque adresse correspond à un port.
+
+	   -Les commutateurs (switch) ont remplacé les concentrateurs (hub) pour éviter les collisions de trames.
+
+	5. -PDU (Protocole Data Unit) est un groupe de données structurées sous la forme d'un vecteur de 3 colonnes : entetes (adresse sources, adresse destination), données, remplissage (por atteindre une certaine taille).
+	Encapsuler un PDU A dans un PDU B c'est mettre le PDU A dans le champ donnée du PDU B. L'encapsulation se fait d'une couche supérieure à une couche inférieure. La "désencapsulation" c'est passer passer d'une couche inférieure à une couche supérieure.
+
+	
+	-Peut on encapsuler un paquet IP dans un paquet IP ?
+	en théorie NON mais en pratique ça se fait.
+
+Notes :
+	un ordinateur n'est connecté qu'à un seul routeur.
+
+
+2. Commandes
+	/* Au cas ifconfig ne marche pas*/
+	1. export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+	adresse IP : inet 10.0.104.14 
+	adresse mask : netmask 255.255.255.0
+
+	2. up pour démarrer down pour arréter
+		ifconfig interface up / down
+
+	3.
+
+	4. On n'a pas de voisins. l'adresse de la passerelle 10.0.104.254
+
+	5. Traceroute:Permet de tracer le chemin que vont prendre les paquets pour atteindre leur destination. Grace au TTL, on arrive à déterminer le chemin des paquets.
+	Le TTL initialisé à 1 est égal à 0 à son arrivée au premier routeur qui en informe à l'émetteur; TTL passe à 2 et sera égal à 0 à son arrivée au second routeur ... jusqu'à ce qu'il atteint la destination finale.
+	De l'université ca bloque à cause des restrictions, mais sur un site internet ca marche parce que on envoie une requete http de l'université vers le site internet
+
+	6. Whois recupére des informations administratives sur les serveurs
+
+	8. host interroge le serveur dns.
+	www.labri.fr 147.210.8.59
+	www.emi.u-bordeaux.fr 10.0.252.3
+	www.u-bordeaux.fr 147.210.215.26
+
+	9. dig permet de voir si le dns marche bien par le champ statut, l'adresse ip, l'adresse des différents serveurs,
+
+	10. netstat permet de voir toutes les connexions au niveau de la couche 4
+
+3. Traces et encapsulation
+	
+	1. 0000 00 26 22 2e 67 f0 00 00 5e 00 01 79 08 06 00 01		.&".g... ^..y....
+	   0010 08 00 06 04 00 01 00 00 5e 00 01 79 93 d2 81 fe		........ ^..y....
+	   0020 00 00 00 00 00 00 93 d2 81 2c 00 00 00 00 00 00 	........ .,......
+	   0030 00 00 00 00 00 00 00 00 00 00 00 00 			........ ....
+
+les 4 premiers bit sont les numéros de ligne et ne font pas partie de la trame.
+format d'une trame ethernet : adresse destination : 6octets : 00:26:22:2e:67:f0
+				adresse source : 6 octets : 00:00:5e:00:01:79
+				type de protocole : 08 06 (ARP)
+				support physique : 00 01 ethernet
+				support logique : 08 00 ipv4
+				longueur adresse physique : 06 octets
+				longueur adresse logique : 04 octets
+				code operation : 00 01 requete
+				adresse physique emetteur : 00:00:5e:00:01:79
+				adresse ip emetteur : 93 d2 81 fe = 147.210.129.254
+				adresse physique du recepteur : 00 00 00 00 00 00 = inconnu
+				adresse ip recepteur : 93 d2 81 2c = 147.210.129.44
+				remplissage : le reste 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+encapsulation
+entete ethernet : 14 octets (6octets destination 6octets source 2octet protocole) jusqu'au protocole
+paquet arp : le reste
+
