@@ -16,3 +16,6 @@ auto eth0
 iface eth0 inet static
 address 147.210.16.2
 netmask 255.255.255.0
+
+Configuration des routes
+Passerelle pour opeth : route add default gw 147.210.13.1
