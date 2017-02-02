@@ -77,7 +77,7 @@ Notes :
 	1. 0000 00 26 22 2e 67 f0 00 00 5e 00 01 79 08 06 00 01		.&".g... ^..y....
 	   0010 08 00 06 04 00 01 00 00 5e 00 01 79 93 d2 81 fe		........ ^..y....
 	   0020 00 00 00 00 00 00 93 d2 81 2c 00 00 00 00 00 00 	........ .,......
-	   0030 00 00 00 00 00 00 00 00 00 00 00 00 			........ ....
+	   0030 00 00 00 00 00 00 00 00 00 00 00 00					........ ....
 
 les 4 premiers bit sont les numéros de ligne et ne font pas partie de la trame.
 format d'une trame ethernet : adresse destination : 6octets : 00:26:22:2e:67:f0
@@ -92,6 +92,40 @@ format d'une trame ethernet : adresse destination : 6octets : 00:26:22:2e:67:f0
 				adresse ip emetteur : 93 d2 81 fe = 147.210.129.254
 				adresse physique du recepteur : 00 00 00 00 00 00 = inconnu
 				adresse ip recepteur : 93 d2 81 2c = 147.210.129.44
+				remplissage : le reste 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+encapsulation
+entete ethernet : 14 octets (6octets destination 6octets source 2octet protocole) jusqu'au protocole
+paquet arp : le reste
+
+	
+	2. format d'une trame ethernet : 
+				adresse destination : 6octets : 00:26:22:2e:67:f0
+				adresse source : 6 octets : 00:18:fe:85:25:80
+				type de protocole : 08 00 (ARP)
+				support physique : 45 00 ethernet
+				support logique : 01 08 ipv4
+				longueur adresse physique : 06 octets : 31:3c:00:00:3f:11
+				longueur adresse logique : 04 octets : 98:5a:93:d2
+				code operation : 08 7e requete
+				adresse physique emetteur : 93:d2:81:2c:00:35
+				adresse ip emetteur : f0 68 00 f4 = 
+				adresse physique du recepteur : 37 b3 46 80 81 80 = 
+				adresse ip recepteur : 00 01 00 04 = 
+
+				adresse destination : 6octets : 00:04:00:04:03:77
+				adresse source : 6 octets : 77:77:06:67:6f:6f
+				type de protocole : 67 6c
+				support physique : 45 00 ethernet
+				support logique : 01 08 ipv4
+				longueur adresse physique : 06 octets : 31:3c:00:00:3f:11
+				longueur adresse logique : 04 octets : 98:5a:93:d2
+				code operation : 08 7e requete
+				adresse physique emetteur : 93:d2:81:2c:00:35
+				adresse ip emetteur : f0 68 00 f4 = 
+				adresse physique du recepteur : 37 b3 46 80 81 80 = 
+				adresse ip recepteur : 00 01 00 04 = 
+
 				remplissage : le reste 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
 encapsulation

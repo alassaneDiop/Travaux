@@ -1,21 +1,61 @@
 1. Configuration de sous réseaux
 
-syl
-auto eth0
-iface eth0 inet static
-address 147.210.16.1
-netmask 255.255.255.0
+	1. /etc/network/interfaces
+		immortal
+			auto eth0
+			iface eth0 inet static
+			address 147.210.13.1
+			netmask 255.255.255.0
 
-auto eth1
-iface eth1 inet static
-address 147.210.14.2
-netmask 255.255.255.0
+			auto eth1
+			iface eth1 inet static
+			address 147.210.12.2
+			netmask 255.255.255.0
 
-nile
-auto eth0
-iface eth0 inet static
-address 147.210.16.2
-netmask 255.255.255.0
+		opeth
+			auto eth0
+			iface eth0 inet static
+			address 147.210.13.2
+			netmask 255.255.255.0
 
-Configuration des routes
-Passerelle pour opeth : route add default gw 147.210.13.1
+		syl
+			auto eth0
+			iface eth0 inet static
+			address 147.210.16.1
+			netmask 255.255.255.0
+
+			auto eth1
+			iface eth1 inet static
+			address 147.210.14.2
+			netmask 255.255.255.0
+
+		nile
+			auto eth0
+			iface eth0 inet static
+			address 147.210.16.2
+			netmask 255.255.255.0
+
+		grave
+			auto eth0
+			iface eth0 inet static
+			address 147.210.12.1
+			netmask 255.255.255.0
+
+			auto eth1
+			iface eth1 inet static
+			address 147.210.14.1
+			netmask 255.255.255.0
+
+
+	5. Configuration des routes /etc/init.d/ma-config.sh
+		Passerelle pour opeth	  :	  route add default gw 147.210.13.1
+		Passerelle pour immortal  :	  route add default gw 147.210.12.1
+		Passerelle pour nile	  :	  route add default gw 147.210.16.1
+		Passerelle pour syl		  :	  route add default gw 147.210.14.1
+		Passerelle pour grave	  :	  route add -net 147.210.13.0/24 gw 147.210.12.2
+									  route add -net 147.210.16.0/24 gw 147.210.14.2
+		// -net pour dire que la cible est un reseau
+		// -host pour dire que la cible est un hote
+		// opeth et immortal constituent un reseau tout comme syl et nile
+
+
