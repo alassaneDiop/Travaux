@@ -1,0 +1,21 @@
+1. Temps de transmission et taux de compression
+	1. temps de transmission
+		le temps de transmission est le volume de données à transmettre sur le débit
+		débit = 9600 bits/s
+		longueur en pouce : 29.7 / 2.54 = 11.69 pouces
+		largeur en pouce : 21 / 2.54 =	8.27 pouces
+		volume de la page : 300² * 11.69 * 8.27 = 8700867 bits
+		temps de transmission = 8700867 / 9600 = 906 = 15mn 6s // sans compression
+
+	taux de compression
+		taux de compression = volume aprés compression / volume avant compression
+		volume aprés compression = 9600 * 60s = 576000 bits // 1mn = 60s pour que la page soit transmise en 1mn maximum
+		taux de compression = 576000 / 8700867 = 6.62%
+
+	2. taux de compression
+		volume avant compression = 400² * 11.69 * 8.27 = 15468208 bits
+		volume aprés compression = 3 * 64000 bits (64kbps) = 192000 bits
+		taux de compression = 192000 / 15468208 = 1.24%
+
+2. Débit de transmission
+	
