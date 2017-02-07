@@ -19,3 +19,62 @@
 
 2. Débit de transmission
 	
+
+5. Nyquist
+	théoréme de nyquist : soit g un signal auquel on appliqueen entrée un filktre passe-bas de bande passante H. Le signal g peut etre entierement reconstitué ) partir d'un échantillonnage à 2H par seconde.
+	théoréme de nyquist (bis) : si un signal g comporte V niveaux significaatifs, le débit maximal est : Dmax = 2Hlog2V
+
+	1. L'oreille humaine entends des sons entre 20Hz et 20KHz.
+	Pour transmettre toute la bande il faut que l'échantillonnage soit supérieur à 40KHz.
+
+	2. la bande passante H = 3100Hz
+	   le débit binanire ca veut dire si on transmet 1 bit par période quel va être le débit
+	Dmax = 2Hlog2V = 2 * 3100 log2V
+	On a 2 niveaux significatifs, soit 0 soit 1, parce qu'on transmet 1 seul bit à la fois => V = 2
+	Dmax = 2 * 3100 * log2(2) = 6200 bit/s
+
+	La plupart des modems utilisent plusieurs niveaux significatifs.
+
+
+6. Shannon
+	Théoréme de shannon : soit un 
+
+	1. capacité maximale de transmission en bits (ou débit maximal) C = Hlog2(1+S/N)
+	bande passante H = 3100 Hz
+	rapport bruit/signal S/N = 30dB (xdB <=> x = 10log10(S/N) = 30 => log10(S/N) = 3 => S/N = 10^3)
+	C = 3100 * log2(1 + 10^3) = 3100 * log2(1001)
+	C = 30898 bits/s
+
+	2. On n'utilise pas la phase de fréquence du téléphone
+
+	3. On utilise des filtres passe-bas et passe-haut
+
+	4. Plus le cable est long, plus l'énergie du signal se dissipe à cause de la chaleur (effet de joule), du rayonnement électromagnétique. Donc l'énergie du signal S est de plus en plus faible, et le rapport S/N est de plus en plus petit. Ce qui diminue le débit maximum selon le théoréme de Shannon.
+
+
+7. Courant porteur en ligne
+	1. la fréquence doit etre elevée par rapport à la fréquence du courant alternatif.
+	Plus la fréquence est élevée plus c'est difficile de décoder l'information.
+Si on a l'information sur 2V + le courant alternatif, ça va aller de environs 222 à 218.
+
+	2. c'est un probléme de sécurité pas de confidentialité, les données peuvent être récupérées par quelqu'un de l'extérieur
+
+
+8. Durée de transfert d'information
+	temps = volume de données / débit
+		= 10 000 Mo / (2/8 Mo/s) = 40 000 s > 11h (22h-6h)
+	La sauvegarde n'est pas réalisable entre 22h et 6h.
+
+	Solution : 
+	soit
+	taux de compression nécessaire : debit = 2Mbit/s
+					temps = 8h = 28800s
+					volume de données = 7200 * 2 = 57600 Mbit = 7200 Mo = 7.2 Go
+	taux de compression = 7.2 / 10 = 72%
+
+	soit
+	débit = volume de données / temps = 10000Mo * 8 / 28800s
+		80000Mbit / 28800 s = 2.77Mb/s
+	
+	soit
+	on augmente le temps de sauvegarde c'est à dire passer à 40000s = 11h6mn40s
