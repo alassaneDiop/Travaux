@@ -1,24 +1,114 @@
+TD TRANSMISSIONS
+
+Formules :
+  Taux de compression = Volume apres compression / volume avant compression
+  Temps de transmission = Volume de donnees / Debit
+  Temps arrivee fin trame = Temps de parcours + Temps de transmission
+  Temps de parcours = Distance / Temps
+  Debit effectif = Debit theorique * taux de reussite
+
+=========
+
 1. Temps de transmission et taux de compression
 	1. temps de transmission
 		le temps de transmission est le volume de données à transmettre sur le débit
 		débit = 9600 bits/s
-		longueur en pouce : 29.7 / 2.54 = 11.69 pouces
-		largeur en pouce : 21 / 2.54 =	8.27 pouces
-		volume de la page : 300² * 11.69 * 8.27 = 8700867 bits
+		longueur en pouce : 29,7 / 2,54 = 11,69 pouces
+		largeur en pouce : 21 / 2,54 =	8,27 pouces
+		volume de la page : 300² * 11,69 * 8,27 = 8700867 bits
 		temps de transmission = 8700867 / 9600 = 906 = 15mn 6s // sans compression
 
 	taux de compression
 		taux de compression = volume aprés compression / volume avant compression
 		volume aprés compression = 9600 * 60s = 576000 bits // 1mn = 60s pour que la page soit transmise en 1mn maximum
-		taux de compression = 576000 / 8700867 = 6.62%
+		taux de compression = 576000 / 8700867 = 6,62%
 
 	2. taux de compression
-		volume avant compression = 400² * 11.69 * 8.27 = 15468208 bits
+		volume avant compression = 400² * 11,69 * 8,27 = 15468208 bits
 		volume aprés compression = 3 * 64000 bits (64kbps) = 192000 bits
-		taux de compression = 192000 / 15468208 = 1.24%
+		taux de compression = 192000 / 15468208 = 1,24%
+
+=========
 
 2. Débit de transmission
+	Debit = 155 Mb/s = 155.10^6 bits/s
+	Longueur = 3000 km
+	Taille des donnees = 512 octets (* 8) = 4096 bits
+	Vitesse = 2.10^8 m/s = 2.10^5 km/s
+	Temps qu'il faut pour le transport d'un bit : Vitesse = distance / temps => temps = distance / vitesse = 3000 / 2.10^5
+													  temps = 0,015 s = 15 ms
+
+	* Debit = Taille des donnees / temps qu'il faut = 4096 bits / 0,015 s = 
+
+	Temps de depart du dernier bit = taille des donnees / debit => 4096 bits / 155.10^6 bits/s
+									= 26425806 s = 26 microsecondes = 0,026 ms
 	
+	Temps de transport du dernier bist = Temps de depart du dernier bit + temps de transport d'un bit
+										0,026 ms + 15 ms = 15,026 ms
+
+=========
+
+3. Transmission avec erreurs
+	- Pourcentage de trames erronees
+		Donnees:
+			taux d'erreur Bit BER = 10^-4
+			volume de donnees du trame = 256 octets
+			la probabilite que n bits ne soient pas errones est (1 - BER)^n
+			1 trame = 256 octets * 8 = 2048 bits
+		=> ((1 - 10^-4)^2048) = 81% est la probabilite que 1 trame ne soit pas erronee
+		=> la probabilite que 1 trame soit erronee est de : 100% - 81% = 19%
+		par analogie le pourcentage de trames erronees si on envoie 1000 trames est de 19%
+
+	- Debit effectif
+		debit effectif = debit theorique * taux de reussite
+		debit theorique = 2048bits * 100 / 2s = 204800 / 2 = 102400 b/s
+		taux de reussite = 81%
+		=> debit effectif = 102400 * 81% = 82944 b/s
+
+	- Nouveau debit effectif
+		1 trame = 53octets * 8 = 424bits
+		=> taux de reussite = ((1 - 10^-4)^424) ~= 96%
+		=> debit theorique = 424bits * 100 / 2s = 42400 / 2 = 21200b/s
+		=> debit effectif = 21200 * 96% = 20352 b/s
+
+=========
+
+4. Protocoles de requete-reponse automatique (ARQ)
+	Donnees:
+		1 trame = 1000 bits
+		vitesse = 2.10^8 m/s = 2.10^5 km/s
+		longueur = 1km
+		debit = 1kb/s et 1Mb/s
+		1 acquitement = 10octets = 80 bits
+	temps de parcours d'1 trame = longueur / vitesse = 1km / 2.10^5 = 5.10^-6 s
+	temps de transmission d'1 trame = volume de donnees / debit
+	  - pour un debit de 1kb/s => 1000bits/10^3b/s = 1 s
+	  - pour un debit de 1Mb/s => 1000bits/10^6b/s = 0.001 s
+	temps d'arrivee de la fin de la trame = temps de parcours + temps de transmission
+	  - pour un debit de 1kb/s => 1,000005 s
+	  - pour un debit de 1Mb/s => 0,001005 s
+	temps d'arrivee de la fin de l'accuse de reception
+	  - pour un debit de 1kb/s => (1,000005s * 80) / 1000 = 0,0800004 s
+	  - pour un debit de 1Mb/s => (0,001005s * 80) / 1000 = 0,0000804 s
+	debit utilise = volume / temps de reception de la trame
+		volume = volume de la trame + volume de l'accuse de reception
+		=> volume = 1000b + 80b = 1080b
+		temps de reception de la trame = temps arrivee dernier bit trame sans accuse de reception + temps arrivee dernier bit accuse de reception
+	  - pour un debit de 1kb/s
+		  temps de reception de la trame = 1,000005s + 0,0800004s = 1,0800054s
+		  => debit utilise = 1080 / 1,0800054 = 999,995000025 b/s
+	  - pour un debit de 1Mb/s
+		  temps de reception de la trame = 0.001005s + 0,0000804s = 0,0010854s
+		  => debit utilise = 1080 / 0,0010854 = 995024,875621891 b/s
+	taux d'utilisation = debit utilise / volume de donnee	
+	  - pour un debit de 1kb/s
+		  => taux d'utilisation = 999,995000025 / 1080 = 92,59%
+	  - pour un debit de 1Mb/s
+		  => taux d'utilisation = 995024,875621891 / 1080 = 
+
+faire le meme procede sur une longueur de 200km et 50000km
+
+=========
 
 5. Nyquist
 	théoréme de nyquist : soit g un signal auquel on appliqueen entrée un filktre passe-bas de bande passante H. Le signal g peut etre entierement reconstitué ) partir d'un échantillonnage à 2H par seconde.
@@ -35,6 +125,7 @@
 
 	La plupart des modems utilisent plusieurs niveaux significatifs.
 
+=========
 
 6. Shannon
 	Théoréme de shannon : soit un 
@@ -51,6 +142,7 @@
 
 	4. Plus le cable est long, plus l'énergie du signal se dissipe à cause de la chaleur (effet de joule), du rayonnement électromagnétique. Donc l'énergie du signal S est de plus en plus faible, et le rapport S/N est de plus en plus petit. Ce qui diminue le débit maximum selon le théoréme de Shannon.
 
+=========
 
 7. Courant porteur en ligne
 	1. la fréquence doit etre elevée par rapport à la fréquence du courant alternatif.
@@ -59,6 +151,7 @@ Si on a l'information sur 2V + le courant alternatif, ça va aller de environs 2
 
 	2. c'est un probléme de sécurité pas de confidentialité, les données peuvent être récupérées par quelqu'un de l'extérieur
 
+=========
 
 8. Durée de transfert d'information
 	temps = volume de données / débit
@@ -69,12 +162,13 @@ Si on a l'information sur 2V + le courant alternatif, ça va aller de environs 2
 	soit
 	taux de compression nécessaire : debit = 2Mbit/s
 					temps = 8h = 28800s
-					volume de données = 7200 * 2 = 57600 Mbit = 7200 Mo = 7.2 Go
-	taux de compression = 7.2 / 10 = 72%
+					volume de données = 7200 * 2 = 57600 Mbit = 7200 Mo = 7,2 Go
+	taux de compression = 7,2 / 10 = 72%
 
 	soit
 	débit = volume de données / temps = 10000Mo * 8 / 28800s
-		80000Mbit / 28800 s = 2.77Mb/s
+		80000Mbit / 28800 s = 2,77Mb/s
 	
 	soit
 	on augmente le temps de sauvegarde c'est à dire passer à 40000s = 11h6mn40s
+
