@@ -3,6 +3,9 @@
 #include <stdlib.h>
 
 #define N 8192
+//#define N 1024
+//#define N 256
+//#define N 64
 
 
 #define TIME_DIFF(t1, t2) \
@@ -24,9 +27,14 @@ void somMat1() {
 
 void somMat2() {
 	int i,j;
-	for(j=0;j<N;j++) {
+//	for(j=0;j<N;j++) {
+//	  for(i=0;i<N;i++) {
+//	    c[i][j]=a[i][j]&b[i][j];			
+//		}
+//	}
 	  for(i=0;i<N;i++) {
-	    c[i][j]=a[i][j]&b[i][j];			
+	    for(j=0;j<N;j++) {
+    		    c[i][j]=a[i][j]&b[i][j];			
 		}
 	}
 }
