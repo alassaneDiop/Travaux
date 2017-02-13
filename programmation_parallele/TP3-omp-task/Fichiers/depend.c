@@ -27,9 +27,21 @@ int main (int argc, char **argv)
 #pragma omp parallel
 #pragma omp single
   for (i=0; i < T; i++ )
-    for (j=0; j < T; j++ )
+    for (j=0; j < T; j++ ) {
+	    if(i==0 && j==0) {
+#pragma omp task firstprivate(i,j) depend(out:A[i][j]) // on dépend de personne
+		    tache(i,j);
+	    } else if(i==0) { 
+#pragma omp task firstprivate(i,j) depend(in:A[i][j-1]) depend(out:A[i][j]) // y a pas de dépendance au dessus par contre y a une dépendance à gauche
+		    tache(i,j);
+	    } else {
+#pragma omp task firstprivate(i,j) depend(in:A[i-1][j]) depend(out:A[i][j])
+		    tache(i,j);
+	    } /*else {
 #pragma omp task firstprivate(i,j)
-      tache(i,j);
+		    tache(i,j);
+	    }*/
+    }
   for (i=0; i < T; i++ ) {
     puts("");
     for (j=0; j < T; j++ )
