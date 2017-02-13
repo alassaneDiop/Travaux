@@ -1,35 +1,37 @@
 Le choix des adresses ip est arbitraire.
+
 Premier pas
 	opeth et syl doivent communiquer par l'intermédiaire de immortal.
-// opeth
-auto eth0
-iface eth0 inet static
-address 192.12.0.2
-netmask 255.255.255.0
 
-//syl
-auto eth0
-iface eth0 inet static
-address 192.11.0.2
-netmask 255.255.255.0
+* opeth
+    auto eth0
+	iface eth0 inet static
+	address 192.12.0.2
+	netmask 255.255.255.0
 
-//immortal
-auto eth0
-iface eth0 inet static
-address 192.10.0.1
-netmask 255.255.255.0
+* syl
+	auto eth0
+	iface eth0 inet static
+	address 192.11.0.2
+	netmask 255.255.255.0
 
-#VLAN 100
-auto eth0.100
-iface eth0.100 inet static
-address 192.11.0.1
-netmask 255.255.255.0
+* immortal
+	auto eth0
+	iface eth0 inet static
+	address 192.10.0.1
+	netmask 255.255.255.0
 
-#VLAN 200
-auto eth0.200
-iface eth0.200 inet static
-address 192.12.0.1
-netmask 255.255.255.0
+	#VLAN 100
+	auto eth0.100
+	iface eth0.100 inet static
+	address 192.11.0.1
+	netmask 255.255.255.0
+
+	#VLAN 200
+	auto eth0.200
+	iface eth0.200 inet static
+	address 192.12.0.1
+	netmask 255.255.255.0
 
 
 	le trafic sortant du switch et entrant dans immortal doit etre tagged
@@ -44,6 +46,7 @@ Configuration avancée
 	sur s2
 		vlan/addport 100 21
 		vlan/addport 200 21
+
 	sur s1
 		vlan/addport 100 21
 		vlan/addport 200 21
