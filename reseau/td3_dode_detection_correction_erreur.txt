@@ -1,0 +1,96 @@
+1. Code-barres postal francais
+
+	1. Chaque code commence par une barre
+
+	2. [......|.|.||..|||||..|||.|||.|.|||.|.........]
+	On lit de la droite vers la gauche. On fait des regroupements de 6 commencant a partir de la premiere barre pleine a partir de la droite
+	[......|.|.||..|||||..|||.|||.|.|||.|.........] => 33405
+
+	3. Soit a et b deux mots de longueur n. La distance d Hamming entre 2 mots de meme longue=ur est egale au nombre de position ou a et b different
+	Exemple : a = 101011
+			  b = 011010
+			  a et b different aux indices 1, 2 et 6; donc la distance est de 3
+	La distance de Hamming d'un code L est de 
+	  dh(L) = min{d(a,b), d(a,c), d(a,d), d(b,c), d(b,d), d(c,d)}
+	
+	J'ai toujours 4| et 2.
+	Soit a un mit, si on modifie q'un seul symbole, on a soit (3| et 3.) soit (5| et 1.), ce qui n'est pas possible. Donc je dois modifier au moins 2 symboles; d'ou dh(a,b) >= 2 quelque soient a et b. Or dh(1,0) = 2 donc dh(code) = 2
+
+	4. Le nombre d'erreur qu'on peut detecter
+	Soit un code avec une distance de hamming delta. On peut toujours detecter delta - 1 erreurs.
+	Une erreur est une barre devune un point ou un point devenu une barre
+	si on envoie a (4| et 2.), on recoit soit b(3| et 3.) ou b(5| et 1.)
+
+	Si delta est la distance de hamming, le nombre d'erreur qu'on peut corriger est < delta / 2.
+	Si delta = 2, le nombre d'erreur qu'on peut detecter est de 0.
+
+	5. Combien peut on corriger
+	  Maximum de vraisemblance
+	  Si le nombre d'erreur est < delta / 2, on peut corriger l'erreur. Pour notre exemple 0 < delta / 2 donc 0 erreur a corriger
+
+============
+
+2. CRC Cyclic Redundancy Check
+	
+	  Convertir un binaire en polynome
+	  1	  0	  1	  0	  1	  1	  1
+	  x^6 x^5 x^4 x^3 x^2 x^1 x^0
+	  ------------------------------
+	  x^6 +	  x^3  +  x^2 + x + 1
+
+	  Le degre du polynome est la taille du checksum. ici le checksum est de 6
+
+	  On multiplie le polynome par x^k, k etant la taille du checksum. Ensuite on divise par G(x). Le reste de la division est C(x) d'ou la cle
+	  le degre du polynome generateur est le nombre de bit de la cle.
+	  Si le nombre de bit du resultat est < au degre du polynome generateur, on rajoute des 0 au debut du resultat.
+
+	  1. le mot = 110111 => B(x) = x^5 + x^4 + x^2 + x + 1
+	  G(x) = x^2 + x + 1
+						 => B(x).x^k = x^7 + x^6 + x^4 + x^3 + x^2 / G(x) = x^5 + x^3 + 1 reste x + 1
+						 => C(x) = x + 1 => la cle est de 11
+
+	  Avec le mot AAB et un polynome generateur G(x) = x^3 + x^2 + 1, on a C(x) = X^4 + x^3 + x + 1 => un cle de 11011 // 0 parce que x^2 n'y est pas.
+
+	  2. Conditiions : degre(B(x)) > degre(G(x)) > degre(C(x))
+
+============
+
+3. Code de Hamming
+	Code de Hamming (11, 7) : Avec 11 bits on transmet 7 bits de donnees
+	decomposition binaire : exemple 53 = 2^5 + 2^4 + 2^2 + 1 = 32 + 16 + 4 + 1
+									53 serait donc controle par c32, c16, c4, c1
+
+	1. s3 => 3 = 2+1 => s3 controle par c1, c2
+	  s5 => c1, c4
+	  s6 => c4, c2
+	  s7 => c4, c2, c1
+	  s9 => c8, c1
+	  s10 => c8, c2
+	  s11 => c8, c2, c1
+
+	2.
+	  c1 = s3 + s5 + s7 + s9 + s11 mod 2
+	  c4 = s5 + s6 + s7 mod 2
+
+	3. 1101011
+	c1 => s3, s5, s7, s9, s11
+	c2 => s3, s6, s7, s10, s11
+	c4 => s5, s6, s7
+	c8 => s9, s10, s11
+
+				  c1 | c2 | s3 | c4 | s5 | s6 | s7 | c8 | s9 | s10 | s11
+		----------------------------------------------------------------
+		  donnee|	 |	  |	1  |	| 1	 | 0  |	1  |	| 0	 | 1   | 1
+		----------------------------------------------------------------
+		  c1	| 0* |	  | 1  |	| 1	 |	  | 1  |	| 0  |	   | 1
+		----------------------------------------------------------------
+		  c2	|	 | 0* | 1  |	|	 | 0  | 1  |	|	 | 1   | 1
+		----------------------------------------------------------------
+		  c4	|	 |	  |	   | 0* | 1	 | 0  |	1  |	|	 |	   |
+		----------------------------------------------------------------
+		  c8	|	 |	  |	   |	|	 |	  |	   | 0*	| 0	 | 1   | 1
+		----------------------------------------------------------------
+		  code	| 0* | 0* | 1  | 0* | 1	 | 0  |	1  | 0* | 0	 | 1   | 1		  cette ligne est le code du mot 1101011
+
+		  0* est le resultat de (ex c1) 1+1+1+1 mod 2
+
