@@ -1,0 +1,5 @@
+NAT
+
+si on a qu' une route on a pas besoin de spécifier les options -i et -o
+
+tcpdump -n -i any pour ecouter sur toutes les interfaces
