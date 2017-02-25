@@ -6,7 +6,7 @@
 	On lit de la droite vers la gauche. On fait des regroupements de 6 commencant a partir de la premiere barre pleine a partir de la droite
 	[......|.|.||..|||||..|||.|||.|.|||.|.........] => 33405
 
-	3. Soit a et b deux mots de longueur n. La distance d Hamming entre 2 mots de meme longue=ur est egale au nombre de position ou a et b different
+	3. Soit a et b deux mots de longueur n. La distance d Hamming entre 2 mots de meme longueur est egale au nombre de position ou a et b different
 	Exemple : a = 101011
 			  b = 011010
 			  a et b different aux indices 1, 2 et 6; donc la distance est de 3
@@ -14,7 +14,7 @@
 	  dh(L) = min{d(a,b), d(a,c), d(a,d), d(b,c), d(b,d), d(c,d)}
 	
 	J'ai toujours 4| et 2.
-	Soit a un mit, si on modifie q'un seul symbole, on a soit (3| et 3.) soit (5| et 1.), ce qui n'est pas possible. Donc je dois modifier au moins 2 symboles; d'ou dh(a,b) >= 2 quelque soient a et b. Or dh(1,0) = 2 donc dh(code) = 2
+	Soit a un mot, si on modifie q'un seul symbole, on a soit (3| et 3.) soit (5| et 1.), ce qui n'est pas possible. Donc je dois modifier au moins 2 symboles; d'ou dh(a,b) >= 2 quelque soient a et b. Or dh(1,0) = 2 donc dh(code) = 2
 
 	4. Le nombre d'erreur qu'on peut detecter
 	Soit un code avec une distance de hamming delta. On peut toujours detecter delta - 1 erreurs.
@@ -94,3 +94,20 @@
 
 		  0* est le resultat de (ex c1) 1+1+1+1 mod 2
 
+============
+
+4. Parite bidimensionnelle (block sum check)
+	ajout de bit de parite : Bit mis à 0 si la somme des autres bits est paire, et à 1 si elle est impaire.
+
+	1010111010111100 => 10101110 | 1
+						10111100 | 1
+						--------------
+						11101101
+
+						11 est le resultat du calcul du bit de parite par ligne
+						11101101 est le resultat du calcul de bit de parite par colonne
+
+					=> 1010111010111100 11 11101101
+
+	Raisonnement
+	1010111010111100 11 11101101
