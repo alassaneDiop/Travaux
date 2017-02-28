@@ -198,3 +198,4 @@
 
 	le cas 1 erreur sur 1 bit de donnees n'est pas distingable du cas 2 erreurs de bits d eparite (1 ligne et 1 colonne)
 
+
