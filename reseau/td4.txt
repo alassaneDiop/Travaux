@@ -1,0 +1,27 @@
+1. Adressage et subdivision du reseau
+
+	1.
+	Classe A = 0
+	Classe B = 10
+	Classe C = 110
+	Classe D = 1110
+	Classe E = le reste
+
+	193.55.28.152 => 193 = 128 + 64 + 1 = en binaire 11000001.......
+	193.55.28.152 correspond a la classe C
+	Le masque du sous reseau est 255.255.255.0
+	L'adresse de diffusion ou broadcast est 193.55.28.255
+
+	2. nombre de machine au maximum qu'on peut connecter a un reseau
+		2^nbre de bit host -2
+		60 sous reseau => 64 est la puissance de 2 > 60
+		=> 64 = 2^6 => 6 bits pour le sous reseaux
+		=> 129.178.000000 00.00000000 => 6 bits pour le ss resaux et 10 bits pour le host
+		2^nbre de bit host - 2 => 2^10 - 2 = 1022
+		On peut donc connecter 1022 machines sur chaque sous reseau
+
+		Le masque du sous reseau
+			les bits du sous reseau seront mis en 1
+			=> 129.178.00000000.00000000 => 129.178.11111100.00000000
+			111111 => 252
+			=> le masque du sous reseau = 255.255.252.0
