@@ -1,3 +1,6 @@
+@reseau = @ip et logique mask
+@broadcast = @reseau ou logique complement mask
+
 1. Adressage et subdivision du reseau
 
 	1.
@@ -25,3 +28,74 @@
 			=> 129.178.00000000.00000000 => 129.178.11111100.00000000
 			111111 => 252
 			=> le masque du sous reseau = 255.255.252.0
+
+	3.
+	248 = 128 + 64 + 32 + 16 + 3 = 11111000
+	129.148.208.26 => 129.148.11010000.00011010 &LOGIQUE 255.255.11111000.0 = 11010000
+			=> 129.148.208.0 @sous reseau de 129.148.208.26
+	
+	129.148.216.145 => 129.148.216.0 @sous reseau
+	129.148.210.32 => 129.148.208.0 @sous reseau
+
+	129.148.210.32 et 129.148.208.26 sont dans le meme sous reseau
+
+	- La plage d'adresse utilisée consiste à donner le premier et le dernier @ip
+		mask = 11111111.11111111.11111000.00000000
+		=> 1er @ip = 11111111.11111111.11111000.00000001
+		=> dernier @ip = 11111111.11111111.11111111.11111110
+
+// la separation se fait à partir du 5éme bit parce que c'est = à 208 dans notre exemple	
+		mask du premier sous reseau = 129.148.11010 000.00000000
+		1er @ip = 129.148.11010 000.00000001
+		dernier @ip = 129.148.11010 111.11111110
+
+pour avoir l'adresse de broadcast, on met tous les bits à 1 ce qui donne 255
+		=> 129.148.11010 111.11111111
+
+
+		meme chose pour le deuxieme sous reseau
+	
+	4. table de routage
+		destination | passerelle | masque          | interface
+		------------------------------------------------------
+		10.0.0.0    | 20.0.0.10  | 255.0.0.0       |1
+		------------------------------------------------------
+		40.0.0.0    | 30.0.0.10  | 255.0.0.0       |2
+		------------------------------------------------------
+		20.0.0.10   | connected  | 255.255.255.255 |1
+		------------------------------------------------------
+		30.0.0.10   | connected  | 255.255.255.255 |2
+		------------------------------------------------------
+		40.0.0.20   | 30.0.0.10  | 0.0.0.0         |2
+		------------------------------------------------------
+
+// pour le masque, si c'est une adresse locale, il faut tout prendre en compte
+// masque 0.0.0.0 pour définir une route par défaut
+
+
+	5. B recoit 1 trame de 1500 octets qui contient un paquet IP de 1482 (on enléve l'entete de 18octets).
+	Or le reseau 20 ne peut transporter que des paquets de 492 octets.
+		- Si le paquet ne peut pas etre fragmenté alors -> erreur ICMP (DF = 1)
+		- Si le routeur ne sait pas fragmenter -> erreur
+		- Sinon paquet fragmenté en 4 paquets
+			en effet 1482 - 20 (entéte) = 1462 données à fragmenter
+				 492 - 20 (entete) = 472 donnees à fragmenter
+				1462 / 472 = 4
+
+	---------------------------------------------------------------------------------
+	| @ MAC destination			| @ MAC source
+	| @ MAC de 10.0.0.10			| @ MAC de 10...
+	---------------------------------------------------------------------------------
+	| protocole 	|	version IP	| taille entete     |   taille de service
+	| 0x0800	| 4			| 5                 | 0....0
+	---------------------------------------------------------------------------------
+	|longueur totale 	|	identité	| flag      | flag offset
+	| 0x0800		| X			| 01010     | 0....0
+	---------------------------------------------------------------------------------
+	| durée de vie 	|	protocol	| checksum
+	| y255		| ?			| 5  
+	---------------------------------------------------------------------------------
+	| @ IP source				| @ IP destination
+	| 10.					| 30.
+	---------------------------------------------------------------------------------
+	

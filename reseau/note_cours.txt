@@ -94,3 +94,44 @@ le 1er bit : 0 individuel, 1 collectif
 le 2eme bit : 0 universel, 1 local
 22 bits suivants : id fabricant
 24 derniérs bits : équipement
+
+
+===================
+
+TCP
+
+La couche transport fait la liaisoon entre l'application et la couche réseau
+les ports sont de 1 à 2^16 - 1. les ports entre 0 et 1000 et poussiéres sont réservés, on peut pas les utiliser. Le serveur a par défaut un numéro de port en fonction del'application.
+
+UDP
+UDP est le plus simple des 2, il ne fait pas de séquencement, c'est à dire on ne sait pas dans quel ordre sont envoyés les segments, il n'y pas de mécanisme de perte. UDP n'est pas en mode connexion, chaque segment est envoyé independamment. La seule sécurité dans UDP est le checksum qui détermine une erreur ou non. UDP n'est pas forcément point à point.
+enlete udp : port source, port destination (serveur), longueur de tout le segment (entete et données), checksum. Le port source est défini que si on attend une réponse.
+UDP ne sert qu'au demultiplexage, il ne fait pas de mode connecté, pas de controle de flux, pas de retransmission si erreur ou perte. Il est utilisé pour la diffusion vers plusieurs machine.
+
+TCP
+Il ne tourne pas sur les routeurs, il est juste à l'émission et à la reception; il fait du bout en bout, il est en mode connection, sans erreur, sans perte, les segments sont numérotés, controle du flux qui permet de dire l'envoie de données si rop rapide ou pas pour baisser ou diminuer le nombre de segements à envoyer, il fai du full duplex cad il y a connexion dans les 2 sens.
+Il traite les données venant de la couche supérieure comme une suite d'octets. le segment TCP est encapsulé dans un segment TCP.
+On échange des segmen pour ouvir une connexion, tra,sferer des données, fermer la connexion.
+entete TCP : port source 16bits, port destination 16bits, numéro de sequence 32bits, accusé de réceptiion 32bits, checksum, numéro d'urgence, options.
+
+TCP ne fait pas de broadcast.
+
+Les délais de retransmission sont variables.
+
+L'aplication FTP est utilisé pour transférer des fichiers, elle utilise 2 ports : 1 de controle et 1 de transfert
+
+
+=======================
+
+DHCP
+
+Il permet d'avoir une adresse ip si on se connecte à un réseau. Il permet d'éviter de rentrer des adresses sur chaque terminal.
+Ca se passe en 4 étapes : le client envoie une requéte en broadcast sur le sous réseau, une requete sur le port udp 67 et écoute sur le port 68 pour attendre les réponses. le serveur envoie une adresse au client. le client accepte l'adresse, le serveur lui envoie un acquittement.
+Le serveur DHCP donne l'adresse ip, le masque, le serveur DNS, la passerelle par défaut, le domaine ...
+DHCP est défini sur TCP/IP plus exactement siur UDP.
+DHCP a deux fonctions : elle gére le protocole de communication entre le serveur et le client
+L'intéret est qu'un client pas avec une adresse ip peut communiquer avec DHCP. DHCP attribue dynamiquement les adresses ip donc il peut les réutiliser.
+Les HOST peutvent detecter quand est ce qu'ils ont besoin d'une adresse ip. DHCP fournit une configuration réseau.
+il ya plusieurs possibilités d'allocation d'adresse: serveur BOOTP -> chaque client aura toujours la meme adresse; serveur dynamique -> il peut allouer et reutiliser les adresses. avec BOOTP à partir du moment ou on change d'adresse MAC, il donnera plus la meme adresse IP.
+Le client n'a pas le droit d'utiliser l'adresse aprés la fin du bail même s'il y a des connections actives utilisant l'adresse, le serveur n'a pas le droit de retirer l'adresse avant la fin du bail.
+Pas besoin d'un serveur dans chaque sous réseau, or que le routeur ne laisse jamais passer une requete broadcast, de ce fait on utilise un DHCP relay. Donc on envoie une requete au DHCP relay qui envoie en unicast au DHCP serveur en passant par le routeur qui à son tour répond en envoyant une requete unicast au DHCP relay qui transmet en broadcast au client.
