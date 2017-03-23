@@ -135,3 +135,33 @@ Les HOST peutvent detecter quand est ce qu'ils ont besoin d'une adresse ip. DHCP
 il ya plusieurs possibilités d'allocation d'adresse: serveur BOOTP -> chaque client aura toujours la meme adresse; serveur dynamique -> il peut allouer et reutiliser les adresses. avec BOOTP à partir du moment ou on change d'adresse MAC, il donnera plus la meme adresse IP.
 Le client n'a pas le droit d'utiliser l'adresse aprés la fin du bail même s'il y a des connections actives utilisant l'adresse, le serveur n'a pas le droit de retirer l'adresse avant la fin du bail.
 Pas besoin d'un serveur dans chaque sous réseau, or que le routeur ne laisse jamais passer une requete broadcast, de ce fait on utilise un DHCP relay. Donc on envoie une requete au DHCP relay qui envoie en unicast au DHCP serveur en passant par le routeur qui à son tour répond en envoyant une requete unicast au DHCP relay qui transmet en broadcast au client.
+
+
+=====================
+
+ROUTAGE
+
+un objet IP est connecté à un réseau de couche 2. La communication avec objet du meme reseau se fait à la couche 2, la communiocation avec un objet de réseau différent se fait à la couche 3 via un routeur.
+
+Router c'est faire compmuniquer des réseaux en passant par plusieurs réseaux ou internet.
+Le routeur se base uniquement sur l'adresse ip destination.
+Un routeur est consituté d'un plan de controle et de données
+le plan de controle contient
+le plan de données recoit les paquets et les envoie.
+
+Sur un routeur On a plusieurs interfaces d'entrée et de sorite. le paquet reçu doit etre orienté vers la bonne sortie.
+
+Si on envoie un paquet via un routeur, les deux interfaces doivent etre dans le meme sous reseau.
+
+Un routeur doit etre configuré et doit connaitre les adresses ip des voisins connectés sur chaque interface.. Le reoutage se fait en fonction de l'adresse destination.
+
+Les alogorithmes de routage :
+-statique : l'utilistaeur remplit la table de routage
+-dynamique : le protocole remplit les tables de routage et s'adapte à la topologie. Il s'adapte à l'évolution du réseau, sélectionne la meilleure route et évite les boucles.
+
+La commande route permet de faire du routage statique sous linux. iproute sur les routeurs cisco : iproute @dest @hop
+la commande netstat permet de consulter les routes.
+
+
+IGP : protocole de routage intérieur ou interdomaine = comment faire le routage à l'intérieur des AS.
+EGP : protocole de routage extérieur ou extradomaine = comment faire le routage entre AS.
