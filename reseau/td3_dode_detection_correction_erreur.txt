@@ -1,0 +1,201 @@
+1. Code-barres postal francais
+
+	1. Chaque code commence par une barre
+
+	2. [......|.|.||..|||||..|||.|||.|.|||.|.........]
+	On lit de la droite vers la gauche. On fait des regroupements de 6 commencant a partir de la premiere barre pleine a partir de la droite
+	[......|.|.||..|||||..|||.|||.|.|||.|.........] => 33405
+
+	3. Soit a et b deux mots de longueur n. La distance d Hamming entre 2 mots de meme longueur est egale au nombre de position ou a et b different
+	Exemple : a = 101011
+			  b = 011010
+			  a et b different aux indices 1, 2 et 6; donc la distance est de 3
+	La distance de Hamming d'un code L est de 
+	  dh(L) = min{d(a,b), d(a,c), d(a,d), d(b,c), d(b,d), d(c,d)}
+	
+	J'ai toujours 4| et 2.
+	Soit a un mot, si on modifie q'un seul symbole, on a soit (3| et 3.) soit (5| et 1.), ce qui n'est pas possible. Donc je dois modifier au moins 2 symboles; d'ou dh(a,b) >= 2 quelque soient a et b. Or dh(1,0) = 2 donc dh(code) = 2
+
+	4. Le nombre d'erreur qu'on peut detecter
+	Soit un code avec une distance de hamming delta. On peut toujours detecter delta - 1 erreurs.
+	Une erreur est une barre devune un point ou un point devenu une barre
+	si on envoie a (4| et 2.), on recoit soit b(3| et 3.) ou b(5| et 1.)
+
+	Si delta est la distance de hamming, le nombre d'erreur qu'on peut corriger est < delta / 2.
+	Si delta = 2, le nombre d'erreur qu'on peut detecter est de 0.
+
+	5. Combien peut on corriger
+	  Maximum de vraisemblance
+	  Si le nombre d'erreur est < delta / 2, on peut corriger l'erreur. Pour notre exemple 0 < delta / 2 donc 0 erreur a corriger
+
+============
+
+2. CRC Cyclic Redundancy Check
+	
+	  Convertir un binaire en polynome
+	  1	  0	  1	  0	  1	  1	  1
+	  x^6 x^5 x^4 x^3 x^2 x^1 x^0
+	  ------------------------------
+	  x^6 +	  x^3  +  x^2 + x + 1
+
+	  Le degre du polynome est la taille du checksum. ici le checksum est de 6
+
+	  On multiplie le polynome par x^k, k etant la taille du checksum. Ensuite on divise par G(x). Le reste de la division est C(x) d'ou la cle
+	  le degre du polynome generateur est le nombre de bit de la cle.
+	  Si le nombre de bit du resultat est < au degre du polynome generateur, on rajoute des 0 au debut du resultat.
+
+	  1. le mot = 110111 => B(x) = x^5 + x^4 + x^2 + x + 1
+	  G(x) = x^2 + x + 1
+						 => B(x).x^k = x^7 + x^6 + x^4 + x^3 + x^2 / G(x) = x^5 + x^3 + 1 reste x + 1
+						 => C(x) = x + 1 => la cle est de 11
+
+	  Avec le mot AAB et un polynome generateur G(x) = x^3 + x^2 + 1, on a C(x) = X^4 + x^3 + x + 1 => un cle de 11011 // 0 parce que x^2 n'y est pas.
+
+	  2. Conditiions : degre(B(x)) > degre(G(x)) > degre(C(x))
+
+============
+
+3. Code de Hamming
+	Code de Hamming (11, 7) : Avec 11 bits on transmet 7 bits de donnees
+	decomposition binaire : exemple 53 = 2^5 + 2^4 + 2^2 + 1 = 32 + 16 + 4 + 1
+									53 serait donc controle par c32, c16, c4, c1
+
+	1. s3 => 3 = 2+1 => s3 controle par c1, c2
+	  s5 => c1, c4
+	  s6 => c4, c2
+	  s7 => c4, c2, c1
+	  s9 => c8, c1
+	  s10 => c8, c2
+	  s11 => c8, c2, c1
+
+	2.
+	  c1 = s3 + s5 + s7 + s9 + s11 mod 2
+	  c4 = s5 + s6 + s7 mod 2
+
+	3. 1101011
+	c1 => s3, s5, s7, s9, s11
+	c2 => s3, s6, s7, s10, s11
+	c4 => s5, s6, s7
+	c8 => s9, s10, s11
+
+			  c1 | c2 | s3 | c4 | s5 | s6 | s7 | c8 | s9 | s10 | s11
+		----------------------------------------------------------------
+		  donnee|    |	  | 1  |    | 1	 | 0  |	1  |	| 0  | 1   | 1
+		----------------------------------------------------------------
+		  c1	| 0* |	  | 1  |    | 1	 |    | 1  |	| 0  |	   | 1
+		----------------------------------------------------------------
+		  c2	|    | 0* | 1  |    |	 | 0  | 1  |	|    | 1   | 1
+		----------------------------------------------------------------
+		  c4	|    |	  |    | 0* | 1	 | 0  |	1  |	|    |	   |
+		----------------------------------------------------------------
+		  c8	|    |	  |    |    |	 |    |	   | 0*	| 0  | 1   | 1
+		----------------------------------------------------------------
+		  code	| 0* | 0* | 1  | 0* | 1	 | 0  |	1  | 0* | 0  | 1   | 1		  cette ligne est le code du mot 1101011
+
+		  0* est le resultat de (ex c1) 1+1+1+1 mod 2
+
+	4. la condition qui verifie le code s'il n'y pas d'erreur : il faut que la somme de chaque ligne modulo 2 fasse 0
+
+	5. On reprend le tableau en inserant une erreur (1 a la place de 0) sur le bit de donnee s7
+			  c1 | c2 | s3 | c4 | s5 | s6 | s7 | c8 | s9 | s10 | s11 | erreur
+		----------------------------------------------------------------
+		  donnee|    |	  | 1  |    | 1	 | 0  |	1  |	| 0  | 1   | 1   | 
+		----------------------------------------------------------------
+		  c1	| 0* |	  | 1  |    | 1	 |    | 0  |	| 0  |	   | 1   | 1
+		----------------------------------------------------------------
+		  c2	|    | 0* | 1  |    |	 | 0  | 0  |	|    | 1   | 1   | 1
+		----------------------------------------------------------------
+		  c4	|    |	  |    | 0* | 1	 | 0  |	0  |	|    |	   |     | 1
+		----------------------------------------------------------------
+		  c8	|    |	  |    |    |	 |    |	   | 0*	| 0  | 1   | 1   |
+		----------------------------------------------------------------
+		  code	| 0* | 0* | 1  | 0* | 1	 | 0  |	0  | 0* | 0  | 1   | 1	
+
+		on a des erreurs sur toutes les lignes qui controlent s7
+		colonne des erreurs : (111) base 2 = 7 => s7 qui comporte une erreur
+
+		On reprend le tableau en inserant une erreur (1 a la place de 0) sur le bit de controle c2
+				  c1 | c2 | s3 | c4 | s5 | s6 | s7 | c8 | s9 | s10 | s11 | erreur
+		----------------------------------------------------------------
+		  donnee|	 |	  |	1  |	| 1	 | 0  |	1  |	| 0	 | 1   | 1   | 
+		----------------------------------------------------------------
+		  c1	| 0* |	  | 1  |	| 1	 |	  | 1  |	| 0  |	   | 1   | 
+		----------------------------------------------------------------
+		  c2	|	 | 1* | 1  |	|	 | 0  | 1  |	|	 | 1   | 1   | 1
+		----------------------------------------------------------------
+		  c4	|	 |	  |	   | 0* | 1	 | 0  |	1  |	|	 |	   |     | 
+		----------------------------------------------------------------
+		  c8	|	 |	  |	   |	|	 |	  |	   | 0*	| 0	 | 1   | 1   |
+		----------------------------------------------------------------
+		  code	| 0* | 1* | 1  | 0* | 1	 | 0  |	1  | 0* | 0	 | 1   | 1	
+
+		on a une erreur que sur la ligne du bit de controle
+
+		si c'est un bit de controle on aura une erreur que sur une ligne, si c' est sur un bit de donne on aura des erreurs sur toutes les lignes qui controlent le bit de donnee
+
+	6.
+			  c1 | c2 | s3 | c4 | s5 | s6 | s7 | c8 | s9 | s10 | s11 | erreur
+		----------------------------------------------------------------
+		  donnee|    |	  |    |    |  	 |    |	   |	|    |     |     | 
+		----------------------------------------------------------------
+		  c1	| 1  |	  | 1  |    | 1	 |    | 1  |	| 1  |	   | 0   | 1
+		----------------------------------------------------------------
+		  c2	|    | 1  | 1  |    | 	 | 0  | 1  |	|    | 0   | 0   | 1
+		----------------------------------------------------------------
+		  c4	|    |	  |    | 1  | 1	 | 0  |	1  |	|    |	   |     | 1
+		----------------------------------------------------------------
+		  c8	|    |	  |    |    |	 |    |	   | 1 	| 1  | 0   | 0   |
+		----------------------------------------------------------------
+		  code	| 1  | 1  | 1  | 1  | 1	 | 0  |	1  | 1  | 1  | 0   | 0	
+
+		message | 1  | 1  | 1  | 1  | 1	 | 0  |	0  | 1  | 1  | 0   | 0	=> 0 a la place de 1 sur s7 vu qu'il y a erreur sur s7
+
+		  111 base 2 = 7 => donc l'erreur est le bit de donnee s7
+
+
+============
+
+4. Parite bidimensionnelle (block sum check)
+	ajout de bit de parite : Bit mis à 0 si la somme des autres bits est paire, et à 1 si elle est impaire.
+
+	on a n bits a decomposer en j lignes et i colonnes de tel sorte que i*j=n. il faut aussi avoir le minimum de bit de parite, on donc donc minimiser i+j
+	16 = 4 * 4 ou 8 * 2 ou 2 * 8. On choisit alors 4 * 4 pour minimiser
+
+	1010111010111100 => 1010 | 1
+						1110 | 0
+						1011 | 0
+						1100 | 1
+						--------------
+						1100 | 
+
+						1001 est le resultat du calcul du bit de parite par ligne
+						1100 est le resultat du calcul de bit de parite par colonne
+
+					=> 1010111010111100 1001 1100
+
+	Raisonnement
+	1010111010111100 1001 1100
+
+	Pour 1 erreur 2 cas sont possibles :
+		- erreur sur un bit de parite (ex ligne) => erreur sur la ligne correspondante
+		- erreur sur un bit de donnee => erreur sur le bit de parite sur sa ligne et sur sa colonne => si on fait le croisement entre la ligne et la colonne, on retrouve le bit errone
+		une erreur pourra toujours etre trouvee et corrigee
+
+	Pour 2 erreurs :
+		- 2 bits de donnees (meme ligne ou meme colonne)
+			- meme ligne ou colonne => 1 ligne et 2 colonnes (ou l'inverse)
+			- differente ligne ou colonne => 2 lignes et 2 colonnes
+
+		- 1 bit de donnee et 1 bit de parite (ligne ou colonne)
+			- sur meme ligne ou colonne => 1 ligne et 1 colonne
+			- sur differente ligne ou colonne => 2 lignes et 1 colonne (ou l'inverse)
+
+		- 2 bits de parite
+			- 2 lignes ou colonnes => 2 lignes ou colonnes 
+			- 1 ligne et 1 colonne => 1 ligne et 1 colonne
+
+			pour 2 erreurs on peut toujours detecter mais on ne peut pas toujours corriger
+
+	le cas 1 erreur sur 1 bit de donnees n'est pas distingable du cas 2 erreurs de bits d eparite (1 ligne et 1 colonne)
+
+

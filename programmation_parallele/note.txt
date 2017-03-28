@@ -1,0 +1,3 @@
+openMP lance par défaut autant de threads qu'il y a de coeur dans la machine
+
+lstopo affiche l'architecture de la machine 

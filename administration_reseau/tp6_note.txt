@@ -1,0 +1,13 @@
+iptables -F :: vider la table
+
+question 2 : iptables -A FORWARD -d 192.168.0.0/24 icmp --icmp-type echo-request -j DROP // interdire tous les paquets a destination du reseau DMZ
+
+question 3 : 
+iptables -P FORWARD DROP // bloquer tous les ping provenant de n'importe quel réseau
+iptables -A FORWARD -s 192.198.0.0/24 icmp -j ACCEPT // autoriser tous les paquets sortants du reseau DMZ
+iptables -A FORWARD -d 192.168.0.0/24 icmp --icmp-type echo-reply -j ACCEPT // permet d'avoir les retours des ping sortants du reseau DMZ
+
+question 4
+iptables -A FORWARD -s 192.168.0.0/24 -p TCP --dport 80 -j ACCEPT
+iptables -A FORWARD -d 192.168.0.0/24 -p TCP -m state ESTABLISHED --sport 80 -j ACCEPT
+

@@ -1,0 +1,388 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\newcommand{\HRule}{\rule{\linewidth}{0.6mm}}
+\usepackage{subfigure}
+\usepackage{multicol}
+\usepackage[usenames,dvipsnames]{color}
+\definecolor{darkgray}{rgb}{0.95,0.95,0.95}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{textcomp}
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{
+    backgroundcolor=\color{lbcolor},
+    tabsize=4,
+    rulecolor=,
+    language=C++,
+    basicstyle=\scriptsize,
+    upquote=true,
+    aboveskip={1.5\baselineskip},
+    columns=fixed,
+    showstringspaces=false,
+    extendedchars=true,
+    breaklines=true,
+    prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    frame=single,
+    showtabs=false,
+    showspaces=false,
+    showstringspaces=false,
+    identifierstyle=\ttfamily,
+    keywordstyle=\color[rgb]{0,0,1},
+    commentstyle=\color[rgb]{0.133,0.545,0.133},
+    stringstyle=\color[rgb]{0.627,0.126,0.941},
+    backgroundcolor=\color{darkgray},
+}
+
+\usepackage[left=1.0cm, right=1.0cm, top=2cm, bottom=4cm]{geometry}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{lastpage}
+\renewcommand\headrulewidth{1pt}
+\fancyhead[L]{\textsc{Nachos Étape 4 : Mémoire virtuelle}}
+\fancyhead[R]{\textsc{Polytech' Grenoble}}
+\renewcommand\footrulewidth{1pt}
+\fancyfoot[R]{ \textsc{RICM 4}}
+
+\begin{document}
+\begin{titlepage}
+
+\begin{center}
+
+
+% Upper part of the page
+\includegraphics[width=0.25\textwidth]{../images/logo}\\[1cm]
+
+\textsc{\LARGE Polytech' Grenoble}\\[1.5cm]
+
+\textsc{\Large RICM 4\`eme ann\'ee}\\[1.2cm]
+
+
+% Title
+\HRule \\[0.4cm]
+{ \huge \bfseries NachOS\\[0.6cm]
+Etape 4: Mémoire virtuelle}
+\\[0.4cm]
+
+\HRule \\[2cm]
+
+% Author and supervisor
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{\'Etudiants:}\\
+Elizabeth \textsc{Paz} \\
+Salem \textsc{Harrache}
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Enseignant:} \\
+Vania \textsc{Marangozova}
+\end{flushright}
+\end{minipage}
+
+\vfill
+
+% Bottom of the page
+{\large  Mars 2012}
+
+\end{center}
+
+\end{titlepage}
+
+\section{Git}
+
+Pour voir les différences entre l'étape 3 et l'étape 4 vous pouvez lancer un
+diff avec le tag step3 :
+\begin{lstlisting}
+git diff step3
+\end{lstlisting}
+ou alors directement avec le commit 78799c....
+\begin{lstlisting}
+git diff 78799ce7a7b788d0f3b501f0d85bab2f21c7190b
+\end{lstlisting}
+
+\section{Test de l'étape 4}
+
+Le premier test consite à créer plusieurs processus simples (putstring).
+Dans le second, on fork trois processus, qui lancent chacuns deux threads
+qui vont écrire leurs noms trois fois.
+
+\begin{lstlisting}
+$ ./runtest.sh
+Compilation en cours...
+Lancement du Test 1 : ForkExec PutString
+----------------------------------------
+./build-origin/nachos-userprog -rs 1 -x ./build/forkprocess
+Debut du pere
+Commit d./build/putstring : Insufficient memory to start the process.
+u./build/putstring : Insufficient memory to start the process.
+./build/putstring : Insufficient memory to start the process.
+ soir, espoir. Build du matin, chagrin
+Commit du soir, espoir. Build du matin, chagrin
+Commit du soir, espoir. Build du matin, chagrin
+Commit du soir, espoir. Build du matin, chagrin
+Commit du soir, espoir. Build du matin, chagrin
+Commit du soir, espoir. Build du matin, chagrin
+Commit du soir, espoir. Build du matin, chagrin
+Commit du soir, espoir. Build du matin, chagrin
+Commit du soir, espoir. Build du matin, chagrin
+Commit du soir, espoir. Build du matin, chagrin
+Commit du soir, espoir. Build du matin, chagrin
+Commit du soir, espoir. Build du matin, chagrin
+Fin du pere
+Machine halting!
+
+Ticks: total 83124, idle 58420, system 24120, user 584
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 605
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...
+
+
+Lancement du Test 2 : ForkExec With Thread
+------------------------------------------
+./build-origin/nachos-userprog -rs 1 -x ./build/forkthreadedprocess
+Debut du pere
+...Fin du pere
+Début du fils 0 : lancement des deux threads a et z
+Début du fils 1 : lancement des deux threads b et y
+Début du fils 2 : lancement des deux threads c et x
+zaybcxzaybcxza
+Fin du thread main du fils 0
+by
+Fin du thread main du fils 1
+cx
+Fin du thread main du fils 2
+Machine halting!
+
+Ticks: total 651494, idle 8500, system 75110, user 567884
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 296
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...
+\end{lstlisting}
+
+\section{Lecture dans la mémoire virtuelle}
+
+Jusqu'a à présent, le (seul) procesus avec son espace d'adresse à l'adresse
+zero, lit et ecrit directement dans la mémoire physique au lieu de la mémoire
+virtuelle.
+
+Pour y remédier, il faut que le processus, au moment de la lecture, fait un
+changement de contexte et utilise sa table de page pour charger l'executable
+dans sa mémoire virtuelle. C'est le role de la fonction \textbf{ReadAtVirtual}
+
+\lstset{caption={\textit{code/userprog/addrspace.cc}}}
+\begin{lstlisting}
+void ReadAtVirtual( OpenFile *executable, int virtualaddr, int numBytes,
+                    int position, TranslationEntry *pageTable,
+                    unsigned int numPages ) {
+    /* Ecriture dans la memoire virtuelle
+    * On commence par initialise les table de pages dans la machine
+    * Ensuite on lit a partir de memoire physique pour recopier octet
+    * par octet dans la memoire virtuelle (avec un buffer par sécurité)
+    */
+    TranslationEntry * old_pageTable = machine->pageTable;
+    unsigned int old_numPages = machine->pageTableSize;
+    machine->pageTable = pageTable;
+    machine->pageTableSize = numPages;
+    //buffer to read the specified portion of executable
+    char buffer[numBytes];
+    //char * buffer = new char[numBytes];
+    // On lit au plus numBytes octets
+    int nb_read = executable->ReadAt(buffer, numBytes, position);
+    // On ecrit dans la mémoire virtuelle
+    for (int i = 0; i < nb_read; i++)
+        machine->WriteMem(virtualaddr+i, 1, buffer[i]);
+    // On restore le context
+    machine->pageTable = old_pageTable;
+    machine->pageTableSize = old_numPages;
+}
+\end{lstlisting}
+
+'''
+
+
+\section{Allocation des cadres de pages}
+
+Nous avons légèrement modifié la classe \textit{frameprovider}. En effet,
+celle-ci alloue un certain nombre de cadres de façon atomique. Un
+processus à besoin de N cadres ou ne lance pas.
+
+\lstset{caption={\textit{code/userprog/frameprovider.cc}}}
+\begin{lstlisting}
+int * FrameProvider::GetEmptyFrames(int n) {
+    RandomInit(0);
+    this->semFrameBitMap->P();
+    int * frames = NULL;
+    if (n <= this->bitmap->NumClear()) {
+        frames = new int[n];
+        for(int i=0; i<n; i++) {
+            int frame = Random()%NumPhysPages;
+            // Recherche d'une page libre
+            while(this->bitmap->Test(frame)) {
+                frame = Random()%NumPhysPages;
+            }
+            this->bitmap->Mark(frame);
+            bzero(&(machine->mainMemory[ PageSize * frame ] ), PageSize );
+            frames[i] = frame;
+        }
+    }
+    this->semFrameBitMap->V();
+    return frames;
+}
+\end{lstlisting}
+
+
+L'utilisation dans \textbf{AddrSpace} est la suivante :
+
+\lstset{caption={\textit{code/userprog/addrspace.cc}}}
+\begin{lstlisting}
+    int * frames = frameprovider->GetEmptyFrames((int) numPages);
+    if (frames == NULL) {
+        DEBUG ('p', "Pas suffisamment de memoire !\n");
+        this->AvailFrames = false;
+        return;
+    } else {
+        this->AvailFrames = true;
+    }
+    for (i = 0; i < numPages; i++) {
+        pageTable[i].virtualPage = i;
+        // for now, virtual page # = phys page #
+        pageTable[i].physicalPage = frames[i];
+    [...]
+
+    delete frames;
+\end{lstlisting}
+
+l'instruction \textbf{return} dans le constructeur avorte la construction de
+l'objet AddrSpace sans pour autant le détruire. Il faut donc utiliser une
+variable d'état (\textit{AvailFrames}) pour s'assurer que la mémoire a
+correctement été alouée. On s'assure également que le destructeur libère les
+cadres un par un...
+
+\section{Création d'un nouveau processus}
+
+La création d'un nouveau processus se déroule en plusieurs étapes :
+\begin{itemize}
+\item Création d'un nouvel espace d'adressage
+\item Creation d'un nouveau Thread main auquel on associe cet espace d'adressage
+\item Appel de Fork de ce nouveau thread.
+\end{itemize}
+
+\lstset{caption={\textit{code/userprog/forkprocess.cc}}}
+\begin{lstlisting}
+void StartForkedProcess(int arg) {
+    currentThread->space->RestoreState();
+    currentThread->space->InitRegisters ();
+    currentThread->space->InitMainThread();
+    machine->Run();
+}
+
+int do_ForkExec (char *filename)
+{
+    OpenFile *executable = fileSystem->Open (filename);
+    AddrSpace *space;
+
+    if (executable == NULL) {
+        printf ("Unable to open file %s\n", filename);
+        delete [] filename;
+        return -1;
+    }
+    // Creation d'un nouvel espace d'adressage
+    space = new AddrSpace (executable);
+
+    // Si c'est null ou qu'il n'y a pas assez de memoire on arrete la
+    if (space == NULL || !space->AvailFrames) {
+        printf("%s : Insufficient memory to start the process.\n",
+                     filename);
+        delete executable;
+        delete [] filename;
+        return -1;
+    }
+    delete executable;
+
+    // Creation du nouveau thread main du nouveau processus
+    Thread * mainThread = new Thread(filename);
+    mainThread->space = space;
+    machine->UpdateRunningProcess(1); // appel atomique
+    mainThread->Fork (StartForkedProcess, 0);
+
+    return 0;
+}
+\end{lstlisting}
+
+L'appel Fork est légèrement modifié. En effet, par défaut Fork lance le thread
+dans l'espace d'adressage du thread appellant (\textit{currentThread}), or pour
+la création de nouveau processus, il faut lancer la thread main du nouveau
+processus dans un nouvel espace d'adressage (qu'on associe au thread avant
+d'appeler Fork)
+
+\lstset{caption={\textit{code/threads/thread.cc}}}
+\begin{lstlisting}
+void
+Thread::Fork (VoidFunctionPtr func, int arg)
+{
+    [...]
+    if (this->space == NULL) {
+        this->space = currentThread->space;
+    }
+    [...]
+}
+\end{lstlisting}
+
+\section{Terminaison}
+
+Pour gérer correctement la terminaison, nous utilons un compteur de processus
+(dans machine) qui permet à n'importe quel processus de savoir s'il est le
+seul à s'executer sur la machine lors de l'appel à \textbf{Exit())}, auquel cas,
+on éteint la machine. Si non on termine simplement le processus. De même pour
+les thread utilisateur, soit il se terminent si d'autres sont en train de
+s'éxecuter, soit ils appellent \textbf{do\_Exit()} qui termine le processus.
+
+
+\lstset{caption={\textit{code/userprog/forkprocess.cc}}}
+\begin{lstlisting}
+void do_Exit() {
+    DEBUG('p', "ExitProcess : %s", currentThread->getName());
+    machine->UpdateRunningProcess(-1);
+    if (machine->Alone()) {
+        interrupt->Halt();
+    }
+    currentThread->space->ToBeDestroyed = true;
+    currentThread->Finish();
+}
+\end{lstlisting}
+
+Pour la destruction de l'espace d'addressage nous allons le faire une fois le
+thread détruit, et comme le currentThread ne se détruit pas lui même, il faut
+détruire l'espace d'adressage dans le destructeur du thread.
+
+\lstset{caption={\textit{code/threads/thread.cc}}}
+\begin{lstlisting}
+Thread::~Thread ()
+{
+    DEBUG ('t', "Deleting thread \"%s\"\n", name);
+
+    ASSERT (this != currentThread);
+    if (stack != NULL)
+    DeallocBoundedArray ((char *) stack, StackSize * sizeof (int));
+#ifdef USER_PROGRAM
+    if (space != NULL && space->ToBeDestroyed) {
+        delete space;
+    }
+#endif
+}
+\end{lstlisting}
+
+
+\end{document}
+

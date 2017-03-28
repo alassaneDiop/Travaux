@@ -1,0 +1,20 @@
+@article{ aliaga2016foreword,
+	title={ Foreword to the Special Section on SIBGRAPI 2016},
+	author={  Aliaga, Daniel G and Fernandes, Leandro AF},
+	journal={	Computers \& Graphics},
+	volume={  60},
+	pages={ A1--A2},
+	year={	2016},
+	publisher={ Elsevier}
+}
+
+@article{ oliveira2016visual,
+	title={ Visual analysis of bike-sharing systems},
+	author={  Oliveira, Guilherme N and Sotomayor, Jose L and Torchelsen, Rafael P and Silva, Cl{ \'  a}udio T and Comba, Jo{ \~a}o LD},
+	journal={	Computers \& Graphics},
+	volume={  60},
+	pages={ 119--129},
+	year={	2016},
+	publisher={ Elsevier}
+}
+

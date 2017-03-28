@@ -1,0 +1,6 @@
+./prog -l images/.. 
+	-v 0 = sequentiel
+	-v 1 = omp
+	-v 2 = opencl
+
+	-i 1 -d p

@@ -1,0 +1,10 @@
+vnc tasha, tasha est une machine du cremi
+
+task-wait est local
+barrier synchronise toute l'équipe de thread
+taskgroup définit une synchronisation par rapport à la descendance du thread
+task-wait = taskgroup seulement task-wait s'interesse aux taches filles alors que taskgroup s'interesse à la descendance (filles et petites filles)
+
+pour l'exo 4 on observe que le master génére un certains nombre de taches. le thread 0 execute main, la premiére instruction generer. le thread 0 génére toutes les taches et quitte la fonction générer une fois que toutes les taches sont exécutées.
+FAut faire attention à la durée de vie des tâches
+

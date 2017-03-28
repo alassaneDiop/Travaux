@@ -1,0 +1,33 @@
+package package com.calculatrice;
+
+import java.util.ArrayList;
+
+public class Pile<T> implements PileInterface<T> {
+
+	private ArrayList<T> liste;
+	
+	public Pile(){
+		this.liste = new ArrayList<T>();
+	}
+	
+	@Override
+	public boolean estVide() {
+		return liste.isEmpty();
+	}
+
+	@Override
+	public void empiler(T d) {
+		this.liste.add(0, d);
+	}
+
+	@Override
+	public void depiler() {
+		this.liste.remove(0);
+	}
+
+	@Override
+	public T valeur() {
+		return this.liste.get(0);
+	}
+
+}

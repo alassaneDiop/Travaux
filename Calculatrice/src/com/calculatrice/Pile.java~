@@ -1,0 +1,54 @@
+package com.calculatrice;
+
+import java.util.ArrayList;
+
+public class Pile
+{
+	private int pos; // position dans le tableau
+	private int [] p;
+
+	public Pile () // creation d’une pile vide de taille 10
+	{
+		p = new int[10];
+		pos = 0;
+	}
+
+	public Pile (int taille) // creation d’un pile vide de taille donnee
+	{
+		p = new int[taille];
+	}
+
+	public void empile (int e)
+	{
+		if (pos == p.length) { // plus d’expace
+			int[] tmp = new int[p.length+10];
+			for (int i = 0; i < p.length; i++)
+				tmp[i] = p[i];
+			p = tmp;
+		}
+
+		p[pos++] = e;
+	}
+
+	public int depile ()
+	{
+		return p[--pos];
+	}
+
+	public int sommet ()
+	{
+		return p[pos-1];
+	}
+
+	public boolean estVide ()
+	{
+		return pos == 0;
+	}
+
+	public void affiche ()
+	{
+		System.out.print("Pile: [");
+		for (int i = pos-1; i >= 0; i--) p[i].affiche ();
+		System.out.println (" ]");
+	}
+}

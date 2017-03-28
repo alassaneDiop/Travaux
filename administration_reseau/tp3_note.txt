@@ -1,0 +1,84 @@
+* I Forger ses paquets : scapy
+** topologie
+
+#                                nile 172.16.0.2
+#                                  |
+#                                 [s2] 
+#                  172.16.0.1      |
+#                           opeth     grave 
+#               eth0 192.168.0.2    \   /    192.168.0.1
+#                                  [s1]
+#                  192.168.0.3    /    \    192.168.0.4
+#                              syl     immortal
+# 
+
+
+
+** question 2 
+   
+scapy
+>>> 
+sr1(IP(dst="192.168.0.4")/ICMP()/"contenu de l'echo request")
+OUTPUT :
+[ 3641.081140] device lo entered promiscuous mode
+Begin emission:
+Finished to send 1 packets.
+*
+Received 1 packets, got 1 answers, remaining 0 packets
+[ 3641.085865] device lo left promiscuous mode
+
+ <IP  version=4L ihl=5L tos=0x0 len=42 id=29378 flags= frag=0L ttl=64 proto=icmp chksum=0x86b9 src=192.168.0.4 dst=192.168.0.3 options=[]        
+ <ICMP  type=echo-reply code=0 chksum=0x4160 id=0x0 seq=0x0                                                                                      
+ <Raw  load='tamere vs bits'| <Padding  load='\x00\x00\x00\x00' | >>>> |
+                                                                                                                                           
+
+Encapsulation : paquet ICMP dans le paquet IP dans le paquet Ethernet. reponse 
+
+
+** question 3
+
+sr(IP(dst="192.168.0.4")/TCP(dport=[22]))
+[ 4232.290511] device lo entered promiscuous mode
+Begin emission:
+.Finished to send 1 packets.
+*
+Received 2 packets, got 1 answers, remaining 0 packets
+[ 4232.306348] device lo left promiscuous mode
+(<Results: TCP:1 UDP:0 ICMP:0 Other:0>, <Unanswered: TCP:0 UDP:0 ICMP:0 Other:0>)
+
+
+** question 4
+
+depuis syl :
+sniff() 
+
+depuis immortal :
+
+sr1(IP(dst="192.168.0.3")/ICMP()/"BONJOUR MADAME")
+
+then depuis syl :
+a=_
+a.nsummary()
+a[1]
+
+output :
+>>> a.nsummary()
+0000 Ether / IP / ICMP 192.168.0.4 > 192.168.0.3 echo-request 0 / Raw / Padding
+0001 Ether / IP / ICMP 192.168.0.3 > 192.168.0.4 echo-reply 0 / Raw
+
+
+>>> a[1]
+<Ether  dst=aa:aa:aa:aa:00:00 src=aa:aa:aa:aa:02:00 type=0x800 |<IP  version=4L ihl=5L tos=0x0 len=42 id=33497 flags= frag=0L ttl=64 proto=icmp chksum=0x76a2 src=192.168.0.3 dst=192.168.0.4 options=[] |<ICMP  type=echo-reply code=0 chksum=0xef28 id=0x0 seq=0x0 |<Raw  load='BONJOUR MADAME' |>>>>
+
+** question 5
+
+for p in range(24):
+    a = IP(dsr="192.168.0.3")/TCP(dport=p, flags ='S')
+    b = sr1(a) // b fait office d'accusé de reception
+      if b : 
+        if b.payload.flags == 18:
+        print "OPEN", p
+
+* 2 - Protocole ARP : une attaque simple
+
+

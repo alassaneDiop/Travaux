@@ -1,0 +1,17 @@
+NAT
+
+si on a qu' une route on a pas besoin de spécifier les options -i et -o
+
+tcpdump -n -i any pour ecouter sur toutes les interfaces
+
+4. Suppression des regles NAT
+	* affichage des règles pour les tables INPUT, OUTPUT et FORWARD
+	iptables -L --line-number
+
+	* Pour avoir les tables PRE et POSTROUTING
+	iptables -L -t nat --line-number
+
+	* Suite à cela, on va pouvoir identifier précisément une règle et on va pouvoir la supprimer précisément avec la commande suivante :
+	iptables -D [TABLE] X
+	ou "TABLE" est la table visée et "X" le numéro de ligne. Par exemple si nous voulons supprimer la ligne 4 de la table INPUT :
+	iptables -D INPUT 4

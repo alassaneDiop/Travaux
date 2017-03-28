@@ -1,0 +1,24 @@
+vnc riker
+
+la boucle for permet de faire des expériences pour des threads de 2 à 24
+
+ca permet de generer des fichiers de données
+ca permet de créer la courbe de speedup 
+
+à faire
+il faut copier task collapse tsp-bit de tsp-bit dans tsp_perf
+
+1. Modifier la sortie du programme
+
+2. Générer le fichier d'expérience
+	export OMP_NUM_THREADS
+
+3. Utiliser Rscript speedUp.R TASK-3, TASK-4, COLLAPSE, TEMPS DE REFERENCE
+	le temps de référence est le temps du programme séquentiel
+./tsp_bit pour obtenir le temps de référence
+
+./tsp_bit 15 1234 = x
+
+Rscript speedUp.R TASK-3 TASK-4 COLLAPSE x
+
+evince speedup.pdf

@@ -1,0 +1,19 @@
+1- Creation d'une équipe de thread
+	3- il y a 24 threads utilisés. il y autant de threads que de coeurs logiques. "Au revoir" s'affiche aprés le thread 24.
+
+	5- L'ordre d'exécution varie à chaque exécution du programma; par contre la ligne "Au revoir" est toujours exécutée par le thread 0.
+
+
+3- Variable partagée vs variable privée
+	2- Le programme devient 100 fois plus lent. Contrairement à la question précédente, le résultat est toujours le même.
+
+
+4- Distribution d'une boucle for
+testDistributionFor.c
+	version 1 : la variable sum sera partagée par tous les threads, elle pourra être consultée et modifiée par tous; par contre l'indice i sera privée à chaque thread. Donc au final sum sera égale à la somme des sommes de chaque thread.
+
+	version 2 : sum et i seront partagées,
+
+	version 3 :
+	
+	avec un exemple, la version 3 donne un résultat correct. On y reviendra
