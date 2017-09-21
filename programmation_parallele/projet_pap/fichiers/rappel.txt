@@ -1,0 +1,19 @@
+Rscript ./experiences/tracer-speedUp.R prog-v* 1000
+sh ./experiences/lancer-expe.sh 
+rm prog-v*
+
+
+résultat pour jeu de la vie:
+	 sur gun:
+		-100 itérations:
+			-DIM=256:   (Best version Omp for tuilée)
+				-Séq (v0): min. 22,8
+				-Séq tuilée (v1): min. 24,1
+				-Omp for (v3): min. 22,8
+				-Omp for tuilée (v4): min. 17,9
+				-Omp task (v6): min. 77,1
+				
+			-DIM=512: (Best version Omp for tuilée)
+				-
+				-Omp task (v6): grosse difference pour 24 thread selon la machine (~8300 pour Belllaud ~43000 pour Tesla )
+
